@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Harjoitus</title>
+    <script
+      src="https://code.jquery.com/jquery-3.4.1.min.js"
+      integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+      crossorigin="anonymous"
+    ></script>
+  </head>
+  <body>
+    <h1>Hae kuvia Flickristä</h1>
+    <div>
+      <label for="Kirjoita tunniste:"><input id="sana" type="text"/></label>
+      <button id="nappi">Hae kuvia</button>
+  </div>
+    <p id="addHere"></p>
+    <script>
+      $("#nappi").on("click", function() {
+        // Napin painaminen
+        $("#addHere").empty(); // Ensin tyhjennä hakutuloskenttä
+        var $hakusana = $("#sana").val(); // Sitten hae input-kentästä --> funktion sisällä, mutta var voidaan luoda jo ulkopuolella (silloin pitäisi viitata hakusana.val();)
+        $.getJSON(
+          "http://api.flickr.com/services/feeds/photos_public.gne?jsoncallback=?",
+          {
+            tags: $hakusana, // Tällä asetetaan hakusana tagiksi, joka hakee Flickristä
+            tagmode: "any",
+            format: "json"
+          }
+        ).done(function(data) {
+          console.dir(data);
+          $(data.items).each(function() {
+            // Lisää uuden img-tagin #addHere-tagin sisälle
+            $("#addHere").append("<img></img>"),
+              $("img")
+                .last()
+                .attr("src", this.media.m); // Tämä tieto löytyy konsoliin tulostuneista tiedoista
+              });
+        });
+      });
+    </script>
+  </body>
+</html>
