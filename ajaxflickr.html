@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-<html>
   <head>
     <title>Imagesearch</title>
     <link rel="icon" href="public/logo.png" />
@@ -13,36 +12,37 @@
   <body>
     <div class="searchDiv">
       <h1>Search Images from Flickr</h1>
-      <label for="Write searchword:"><input id="word" type="text" placeholder="Type here..."/></label>
-      <input id="searchClick" type="submit" value="Search"></input>
+        <input id="word" type="text" onfocus="this.value=''" placeholder="Type here..."/>
+      <input id="searchClick" type="submit" value="Search" onclick="document.getElementById('word').value = ''"></input>
   </div>
-    <div id="addHere"></div>
+    <div id="addHere">
+    </div>
     <script>
-      $("#word").keyup((event) =>{
-          if (event.keyCode === 13) {
-              $("#searchClick").click();
-          }
-      });
-      $("#searchClick").on("click", () => {
-        $("#addHere").empty();
+    $("#word").keyup((event) =>{
+        if (event.keyCode === 13) {
+            $("#searchClick").click();
+        }
+    });
+    $("#searchClick").on("click", () => {
+      $("#addHere").empty()
         var $searchWord = $("#word").val();
         $.getJSON(
-          "http://api.flickr.com/services/feeds/photos_public.gne?jsoncallback=?",
-          {
+        "http://api.flickr.com/services/feeds/photos_public.gne?jsoncallback=?",
+        {
             tags: $searchWord,
             tagmode: "any",
             format: "json"
-          }
+        }
         ).done((data) => {
-          console.dir(data);
-          $(data.items).each(function() {
+        console.dir(data);
+        $(data.items).each(function() {
             $("#addHere").append("<img></img>"),
-              $("img")
+            $("img")
                 .last()
                 .attr("src", this.media.m);
-              });
+            });
         });
-      });
+    });
     </script>
   </body>
 </html>
